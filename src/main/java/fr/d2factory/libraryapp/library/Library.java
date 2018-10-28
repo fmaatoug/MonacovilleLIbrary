@@ -5,6 +5,7 @@ import fr.d2factory.libraryapp.member.Member;
 
 import java.time.LocalDate;
 
+
 /**
  * The library class is in charge of stocking the books and managing the return delays and members
  *
@@ -25,7 +26,7 @@ public interface Library {
      * @see fr.d2factory.libraryapp.book.ISBN
      * @see Member
      */
-    Book borrowBook(long isbnCode, Member member, LocalDate borrowedAt) throws HasLateBooksException;
+    void borrowBook(double isbnCode, Member member, LocalDate borrowedAt) throws HasLateBooksException;
 
     /**
      * A member returns a book to the library.

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * The book repository emulates a database via 2 HashMaps
@@ -13,20 +14,23 @@ public class BookRepository {
     private Map<Book, LocalDate> borrowedBooks = new HashMap<>();
 
     public void addBooks(List<Book> books){
-        //TODO implement the missing feature
+
+        for ( Book book: books) {
+            ISBN isbn = new ISBN();
+            availableBooks.put(isbn,book);
+        }
     }
 
-    public Book findBook(long isbnCode) {
-        //TODO implement the missing feature
-        return null;
+    public Book findBook(double isbnCode) {
+        return availableBooks.get(isbnCode);
     }
 
-    public void saveBookBorrow(Book book, LocalDate borrowedAt){
-        //TODO implement the missing feature
+    public void saveBookBorrow(Book book, LocalDate borrowedAt) {
+        borrowedBooks.put(book, borrowedAt);
+        availableBooks.remove(book);
     }
 
     public LocalDate findBorrowedBookDate(Book book) {
-        //TODO implement the missing feature
-        return null;
+         return borrowedBooks.get(book);
     }
 }

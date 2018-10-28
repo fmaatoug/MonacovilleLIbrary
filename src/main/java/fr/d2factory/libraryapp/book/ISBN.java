@@ -1,9 +1,9 @@
 package fr.d2factory.libraryapp.book;
 
 public class ISBN {
-    long isbnCode;
+    Double isbnCode;
 
-    public ISBN(long isbnCode) {
-        this.isbnCode = isbnCode;
+    public ISBN() {
+        this.isbnCode = Math.random()*1000000;
     }
 }
