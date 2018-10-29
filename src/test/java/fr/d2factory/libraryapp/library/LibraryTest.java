@@ -1,6 +1,7 @@
 package fr.d2factory.libraryapp.library;
 
 import fr.d2factory.libraryapp.book.BookRepository;
+import fr.d2factory.libraryapp.member.Student;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class LibraryTest {
 
     @Test
     public void member_can_borrow_a_book_if_book_is_available(){
-        fail("Implement me");
+        Student student = new Student(1);
     }
 
     @Test
