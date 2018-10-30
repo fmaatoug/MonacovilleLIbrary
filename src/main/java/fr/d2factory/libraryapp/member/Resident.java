@@ -8,19 +8,14 @@ import fr.d2factory.libraryapp.library.Library;
 
 import java.time.LocalDate;
 
-public class Resident extends Member implements Library {
+public class Resident extends Member {
     @Override
     public void payBook(int numberOfDays) {
-
-    }
-
-    @Override
-    public Book borrowBook(double isbnCode, Member member, LocalDate borrowedAt) throws HasLateBooksException {
-        return null;
-    }
-
-    @Override
-    public void returnBook(Book book, Member member) {
+        double payment = 0;
+        if (numberOfDays > 30) {
+            payment = 30 * 0.1 + numberOfDays % 30 * 0.2;
+        }
+        this.setWallet((float) (getWallet() - payment));
 
     }
 }

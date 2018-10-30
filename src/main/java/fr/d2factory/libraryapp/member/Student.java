@@ -13,24 +13,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class Student  extends Member implements Library{
+public class Student  extends Member {
 
     private  int year;
-    BookRepository bookRepository = new BookRepository();
-    private Map<Book, LocalDate> myBorrowedBooks = new HashMap<>();
-
     public Student(int year){
         this.year = year;
     }
 
 
     @Override
-    public double payBook(int numberOfDays) {
+    public void payBook(int numberOfDays) {
         double payment = 0 ;
         if (numberOfDays > 30){
             payment = 30 * 0.1 + numberOfDays % 30 * 0.15;
         }
-        return payment;
+        this.setWallet((float) (getWallet()- payment));
     }
 
     public Boolean isFirstYear() {
@@ -40,26 +37,4 @@ public class Student  extends Member implements Library{
         return false;
     }
 
-    @Override
-    public void borrowBook(double isbnCode, LocalDate borrowedAt) throws HasLateBooksException {
-        Collection<LocalDate> values = myBorrowedBooks.values();
-        for (LocalDate localDate:values){
-            if (Period.between(LocalDate.now(),localDate).getDays()>30){
-                throw new HasLateBooksException();
-            }
-        }
-        if (bookRepository.findBook(isbnCode)!= null){
-            bookRepository.saveBookBorrow(bookRepository.findBook(isbnCode),borrowedAt);
-            myBorrowedBooks.put(bookRepository.findBook(isbnCode),borrowedAt);
-        }
-    }
-
-    @Override
-    public void returnBook(Book book) {
-        Period numberOfDays;
-        LocalDate borrowedBookDate = bookRepository.findBorrowedBookDate(book);
-        numberOfDays = Period.between(LocalDate.now(), borrowedBookDate);
-        bookRepository.addBook(book);
-        Double payment = payBook(numberOfDays.getDays());
-    }
 }

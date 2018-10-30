@@ -17,7 +17,7 @@ public abstract class Member {
      *
      * @param numberOfDays the number of days they kept the book
      */
-    public abstract double payBook(int numberOfDays);
+    public abstract void payBook(int numberOfDays);
 
     public float getWallet() {
         return wallet;
