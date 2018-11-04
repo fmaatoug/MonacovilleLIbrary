@@ -6,6 +6,7 @@ import fr.d2factory.libraryapp.member.Member;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static java.lang.Math.abs;
@@ -46,7 +47,7 @@ public class BookRepository implements Library{
     public void saveBookBorrow(Book book, Member member,LocalDate borrowedAt) {
         borrowedBooks.put(book, borrowedAt);
         memberBorrowedBooks.put(member,book);
-        availableBooks.remove(book);
+        availableBooks.remove(book.getIsbn());
     }
 
     public LocalDate findBorrowedBookDate(Book book) {
@@ -55,7 +56,7 @@ public class BookRepository implements Library{
 
     @Override
     public void borrowBook(double isbnCode, Member member , LocalDate borrowedAt) throws HasLateBooksException {
-        if (canBorrowBool(member) == false ){
+        if (canBorrowBook(member) == false ){
             throw new HasLateBooksException();
         }
         if (findBook(isbnCode)!= null){
@@ -64,11 +65,11 @@ public class BookRepository implements Library{
         }
     }
 
-    public Boolean canBorrowBool(Member member){
+    public Boolean canBorrowBook(Member member){
         Collection<Book> values = memberBorrowedBooks.values();
         Boolean canBorrow = true;
         for (Book book:values){
-            if (Period.between(borrowedBooks.get(book),LocalDate.now()).getDays()>30){
+            if (ChronoUnit.DAYS.between(borrowedBooks.get(book),LocalDate.now())>30){
                 canBorrow = false;
             }
         }
@@ -77,10 +78,10 @@ public class BookRepository implements Library{
 
     @Override
     public void returnBook(Book book, Member member) {
-        Period numberOfDays;
+        long numberOfDays;
         LocalDate borrowedBookDate = findBorrowedBookDate(book);
-        numberOfDays = Period.between(LocalDate.now(), borrowedBookDate);
+        numberOfDays = ChronoUnit.DAYS.between(LocalDate.now(), borrowedBookDate);
         addBook(book);
-        member.payBook(abs(numberOfDays.getDays()));
+        member.payBook((int) abs(numberOfDays));
     }
 }

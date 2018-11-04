@@ -85,7 +85,7 @@ public class LibraryTest {
         ISBN isbn = new ISBN(968787565);
         bookRepository.borrowBook(isbn.getIsbnCode(),student,LocalDate.now().minusDays( 30 ));
         bookRepository.returnBook(bookRepository.findMemberBorrowedBook(student),student);
-        assertFalse(student.getWallet()== 0);
+        assertTrue(student.getWallet()== 0);
     }
 
     @Test
@@ -93,21 +93,21 @@ public class LibraryTest {
 
         Student student = new Student(1);
         student.setWallet(3);
-        ISBN isbn = new ISBN(968787565);
+        ISBN isbn = new ISBN(465789457);
         bookRepository.borrowBook(isbn.getIsbnCode(),student,LocalDate.now().minusDays( 15 ));
         bookRepository.returnBook(bookRepository.findMemberBorrowedBook(student),student);
-        assertFalse(student.getWallet()== 3);
+        assertTrue(student.getWallet()== 3);
     }
 
     @Test
     public void students_pay_15cents_for_each_day_they_keep_a_book_after_the_initial_30days(){
 
         Student student = new Student(3);
-        student.setWallet(45);
-        ISBN isbn = new ISBN(968787565);
+        student.setWallet((float) 4.5);
+        ISBN isbn = new ISBN(465789456);
         bookRepository.borrowBook(isbn.getIsbnCode(),student,LocalDate.now().minusDays( 40 ));
         bookRepository.returnBook(bookRepository.findMemberBorrowedBook(student),student);
-        assertFalse(student.getWallet()== 0);
+        assertTrue(student.getWallet()== 0);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class LibraryTest {
         ISBN isbn = new ISBN(465789453);
         bookRepository.borrowBook(isbn.getIsbnCode(),resident,LocalDate.now().minusDays( 65 ));
         bookRepository.returnBook(bookRepository.findMemberBorrowedBook(resident),resident);
-        assertFalse(resident.getWallet()== 0);
+        assertTrue(resident.getWallet()== 0);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class LibraryTest {
         student.setWallet(45);
         ISBN isbn = new ISBN(465789454);
         bookRepository.borrowBook(isbn.getIsbnCode(),student,LocalDate.now().minusDays( 31 ));
-        assertFalse(bookRepository.canBorrowBool(student));
+        assertFalse(bookRepository.canBorrowBook(student));
     }
 
 }

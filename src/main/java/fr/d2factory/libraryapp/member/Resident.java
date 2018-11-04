@@ -16,7 +16,7 @@ public class Resident extends Member {
     public void payBook(int numberOfDays) {
         double payment = 0;
         if (numberOfDays > 30) {
-            payment = 30 * 0.1 + numberOfDays % 30 * 0.2;
+            payment = 60 * 0.1 + numberOfDays % 60 * 0.2;
         }else {
             payment = numberOfDays * 0.1;
         }

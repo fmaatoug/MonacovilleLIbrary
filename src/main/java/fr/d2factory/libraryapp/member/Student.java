@@ -15,8 +15,13 @@ public class Student  extends Member {
     @Override
     public void payBook(int numberOfDays) {
         double payment = 0 ;
+        if (isFirstYear()){
+            numberOfDays %= 15;
+        }
         if (numberOfDays > 30){
             payment = 30 * 0.1 + numberOfDays % 30 * 0.15;
+        }else {
+            payment = numberOfDays * 0.1;
         }
         this.setWallet((float) (getWallet()- payment));
     }
