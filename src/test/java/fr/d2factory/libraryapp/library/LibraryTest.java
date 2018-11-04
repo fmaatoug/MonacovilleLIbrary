@@ -15,10 +15,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class LibraryTest {
-    private Library library ;
     private BookRepository bookRepository;
-    private ISBN isbn;
-    private Student student;
 
     @Before
     public void setup(){
