@@ -6,11 +6,14 @@ package fr.d2factory.libraryapp.book;
 public class Book {
     String title;
     String author;
-    ISBN isbn;
+    double isbn;
 
-    public Book(String title, String author, ISBN isbn) {
+    public Book(String title, String author, double isbn) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+    }
+    public double getIsbn(){
+        return this.isbn;
     }
 }

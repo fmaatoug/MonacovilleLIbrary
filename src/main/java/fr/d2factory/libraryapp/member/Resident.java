@@ -9,11 +9,16 @@ import fr.d2factory.libraryapp.library.Library;
 import java.time.LocalDate;
 
 public class Resident extends Member {
+
+    private Boolean isStudent = false;
+
     @Override
     public void payBook(int numberOfDays) {
         double payment = 0;
         if (numberOfDays > 30) {
             payment = 30 * 0.1 + numberOfDays % 30 * 0.2;
+        }else {
+            payment = numberOfDays * 0.1;
         }
         this.setWallet((float) (getWallet() - payment));
 

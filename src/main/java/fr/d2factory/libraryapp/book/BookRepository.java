@@ -3,30 +3,31 @@ package fr.d2factory.libraryapp.book;
 import fr.d2factory.libraryapp.library.HasLateBooksException;
 import fr.d2factory.libraryapp.library.Library;
 import fr.d2factory.libraryapp.member.Member;
-import fr.d2factory.libraryapp.member.Student;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
+import static java.lang.Math.abs;
+
 /**
  * The book repository emulates a database via 2 HashMaps
  */
 public class BookRepository implements Library{
-    private Map<ISBN, Book> availableBooks = new HashMap<>();
+    private Map<Double, Book> availableBooks = new HashMap<>();
     private Map<Book, LocalDate> borrowedBooks = new HashMap<>();
+    private Map<Member,Book> memberBorrowedBooks = new HashMap<>();
 
     public void addBooks(List<Book> books){
 
         for ( Book book: books) {
-            ISBN isbn = new ISBN();
+            double isbn = book.getIsbn();
             availableBooks.put(isbn,book);
         }
     }
 
     public void addBook(Book book){
-        ISBN isbn = new ISBN();
-
+        double isbn = book.getIsbn();
      availableBooks.put(isbn,book);
     }
 
@@ -34,8 +35,17 @@ public class BookRepository implements Library{
         return availableBooks.get(isbnCode);
     }
 
-    public void saveBookBorrow(Book book, LocalDate borrowedAt) {
+    public Boolean hasBook(double isbnCode) {
+        return (availableBooks.get(isbnCode) != null) ?  true : false;
+    }
+
+    public Book findMemberBorrowedBook(Member member) {
+        return memberBorrowedBooks.get(member);
+    }
+
+    public void saveBookBorrow(Book book, Member member,LocalDate borrowedAt) {
         borrowedBooks.put(book, borrowedAt);
+        memberBorrowedBooks.put(member,book);
         availableBooks.remove(book);
     }
 
@@ -44,17 +54,25 @@ public class BookRepository implements Library{
     }
 
     @Override
-    public void borrowBook(double isbnCode, Member member ,LocalDate borrowedAt) throws HasLateBooksException {
-        Collection<LocalDate> values = borrowedBooks.values();
-        for (LocalDate localDate:values){
-            if (Period.between(LocalDate.now(),localDate).getDays()>30){
-                throw new HasLateBooksException();
-            }
+    public void borrowBook(double isbnCode, Member member , LocalDate borrowedAt) throws HasLateBooksException {
+        if (canBorrowBool(member) == false ){
+            throw new HasLateBooksException();
         }
         if (findBook(isbnCode)!= null){
-            saveBookBorrow(findBook(isbnCode),borrowedAt);
+            saveBookBorrow(findBook(isbnCode),member,borrowedAt);
             borrowedBooks.put(findBook(isbnCode),borrowedAt);
         }
+    }
+
+    public Boolean canBorrowBool(Member member){
+        Collection<Book> values = memberBorrowedBooks.values();
+        Boolean canBorrow = true;
+        for (Book book:values){
+            if (Period.between(borrowedBooks.get(book),LocalDate.now()).getDays()>30){
+                canBorrow = false;
+            }
+        }
+        return canBorrow;
     }
 
     @Override
@@ -63,6 +81,6 @@ public class BookRepository implements Library{
         LocalDate borrowedBookDate = findBorrowedBookDate(book);
         numberOfDays = Period.between(LocalDate.now(), borrowedBookDate);
         addBook(book);
-        member.payBook(numberOfDays.getDays());
+        member.payBook(abs(numberOfDays.getDays()));
     }
 }
