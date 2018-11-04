@@ -1,29 +1,27 @@
 package fr.d2factory.libraryapp.member;
 
 
-public class Student  extends Member {
+public class Student extends Member {
 
-    private  int year;
-    Boolean isStudent;
+    private int year;
 
-    public Student(int year){
+    public Student(int year) {
         this.year = year;
-        this.isStudent = true;
     }
 
 
     @Override
     public void payBook(int numberOfDays) {
-        double payment = 0 ;
-        if (isFirstYear()){
+        double payment = 0;
+        if (isFirstYear()) {
             numberOfDays %= 15;
         }
-        if (numberOfDays > 30){
+        if (numberOfDays > 30) {
             payment = 30 * 0.1 + numberOfDays % 30 * 0.15;
-        }else {
+        } else {
             payment = numberOfDays * 0.1;
         }
-        this.setWallet((float) (getWallet()- payment));
+        this.setWallet((float) (getWallet() - payment));
     }
 
     public Boolean isFirstYear() {
@@ -33,8 +31,5 @@ public class Student  extends Member {
         return false;
     }
 
-    public Boolean getIsStudent(){
-        return this.isStudent;
-    }
 
 }

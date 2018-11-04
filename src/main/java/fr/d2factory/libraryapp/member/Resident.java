@@ -10,8 +10,6 @@ import java.time.LocalDate;
 
 public class Resident extends Member {
 
-    private Boolean isStudent = false;
-
     @Override
     public void payBook(int numberOfDays) {
         double payment = 0;
